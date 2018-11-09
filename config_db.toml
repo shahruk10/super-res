@@ -1,0 +1,32 @@
+# Database generation config file
+
+# name of db and where it will be saved
+save_name = 'BSD500_train_001'
+save_dir = '/media/shahruk/terra2d/Projects/shohel_sir_msc/db'
+
+# path to image sets to include in db
+image_sets = ['/media/shahruk/terra2d/Projects/shohel_sir_msc/images/BSR/BSDS500/data/images/train']
+
+# number of folds ; 0 for single db
+kfold = 0
+
+# number of patches to extract from each image
+num_patches = 32
+
+# original patch sizes
+original_patches = [64,128]
+
+# resized patches
+resized_patches = [32,64]
+
+# read image as color, else grayscale
+color = true
+
+# interpoloation method for downsizing
+interpolation = 'bicubic'
+
+# miscellaneous settings
+shuffle = true
+normalize = true
+compress = true    # compress database using gzip compression
+flush_size = 500   # number of files processed in memory before flushing to disk

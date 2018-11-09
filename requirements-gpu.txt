@@ -1,0 +1,5 @@
+toml
+h5py
+scikit-learn
+tensorflow-gpu
+keras

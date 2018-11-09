@@ -1,0 +1,37 @@
+# Model Config File
+# This gets copied to model directory when training is started
+
+[database]
+x = 'org_64_rsz_32'                   # model input (open hdf5 file to see names)
+y = 'org_64'                          # model target
+
+# list of dbs to use in cross validation (CV) training. For normal training the first entry will be used
+train = ['/media/shahruk/terra2d/Projects/shohel_sir_msc/db/BSD500_train_001/BSD500_train_001.hdf5']
+
+# can specify seperate validation db, will overide default validation set during CV                          
+val = ['/media/shahruk/terra2d/Projects/shohel_sir_msc/db/BSD500_val_001/BSD500_val_001.hdf5']     
+
+[model_arch]
+modelArch = 'ResNetSR001'                              # model architecture to use from modelLib.py
+modelDir = '/media/shahruk/terra2d/Projects/shohel_sir_msc/models'                                      # where models are saved
+modelName = 'ResNetSR_test001'             # name to save model with
+
+[model_params]                                  # params particular to an architecture (define models in modelLib.py)
+inputDim = [32,32,3]                                  # 671 for duration model, 679 for acoustic
+outputDim = [64,64,3]
+useConvTranspose = false
+
+[training_params]
+# relevant if using sequentialDatagenerator
+numWorkers = 6          # number of threads used to keep data queue populated
+maxMemory = 8           # Gigabytes, queue size limit
+epochs = 200
+batchSize = 256       
+patience = 30            # number of epochs to wait before stopping if no change in loss
+metricFuncs = ['psnr']   # additional metrics to be calculated if needed
+lossFunc = 'mse'         # 'mse' / 'mae' / 'psnr' etc. - look at metrics.py and keras doc for more options https://keras.io/losses/
+
+[optimizer_params]       # check keras docs for other parameters like decay, beta etc.
+optimizer = 'adam'       # 'sgd' / 'adam' / 'adagrad' / 'adadelta'/ 'rmsprop' - look at keras doc for more options https://keras.io/optimizers/
+lr = 0.001
+
