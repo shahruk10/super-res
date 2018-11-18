@@ -1,5 +1,5 @@
 1. Add exception for thumbs.db or non-image files @ makeHDF5.py
-2. Implement augmentations: @ makeHDF5.py
+2. Implement augmentations: @ makeHDF5.py <<<
     a. Rotation
     b. Scaling
     c. Flipping
