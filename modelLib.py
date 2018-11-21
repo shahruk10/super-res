@@ -160,6 +160,35 @@ def VDSR_001(IMG_SIZE = (32,32,1)):
 
     return model
 
+@addModel
+def FSRCNN_001(scale_factor=4):
+    input_img = Input(shape=(32,32, 1))
+
+    model = Conv2D(56, (5, 5), padding='same', kernel_initializer='he_normal')(input_img)
+    model = PReLU()(model)
+
+    model = Conv2D(16, (1, 1), padding='same', kernel_initializer='he_normal')(model)
+    model = PReLU()(model)
+
+    model = Conv2D(12, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = PReLU()(model)
+    model = Conv2D(12, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = PReLU()(model)
+    model = Conv2D(12, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = PReLU()(model)
+    model = Conv2D(12, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = PReLU()(model)
+
+    model = Conv2D(56, (1, 1), padding='same', kernel_initializer='he_normal')(model)
+    model = PReLU()(model)
+
+    model = Conv2DTranspose(1, (9, 9), strides=(scale_factor, scale_factor), padding='same')(model)
+
+    output_img = model
+
+    model = Model(input_img, output_img)
+    return model
+
 if __name__ == '__main__':
 	model = makeModel(sys.argv[1], verbose=True)
 	plot_model(model, to_file='./model_%s.png' % sys.argv[1])
