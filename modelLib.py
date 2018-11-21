@@ -1,5 +1,5 @@
 from keras.models import Model
-from keras.layers import Input, Dense, Flatten, BatchNormalization, Dropout, Activation
+from keras.layers import Input, Dense, Flatten, BatchNormalization, Dropout, Activation, Subtract
 from keras.layers import Conv2D, MaxPool2D, UpSampling2D, Conv2DTranspose
 from keras.layers import Concatenate, Add, Average,Convolution2D
 from keras import backend as K
@@ -79,7 +79,7 @@ def ResNetSR001(params):
     return Model(inputs=[i], outputs=[x])
 
 @addModel
-def SRCNN(n1=64,n2=32,n3=1,f1=9,f2=1,f3=5,img_rows=32,img_cols=32,channels=3):
+def SRCNN_001(n1=64,n2=32,n3=1,f1=9,f2=1,f3=5,img_rows=32,img_cols=32,channels=3):
     x = Input(shape = (img_rows,img_cols,channels))
     c1 = Convolution2D(n1, f1,f1, activation = 'relu', init = 'he_normal', border_mode='same')(x)
     c2 = Convolution2D(n2, f2, f2, activation = 'relu', init = 'he_normal', border_mode='same')(c1)
@@ -87,6 +87,23 @@ def SRCNN(n1=64,n2=32,n3=1,f1=9,f2=1,f3=5,img_rows=32,img_cols=32,channels=3):
     model = Model(input = x, output = c3)
     #adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-8) 
     #model.compile(loss='mse', metrics=[PSNRLoss], optimizer=adam)     
+    return model
+
+@addModel
+def DnCNN_001():
+    inpt = Input(shape=(32,32,3))
+    # 1st layer, Conv+relu
+    x = Conv2D(filters=64, kernel_size=(3,3), strides=(1,1), padding='same')(inpt)
+    x = Activation('relu')(x)
+    # 15 layers, Conv+BN+relu
+    for i in range(15):
+        x = Conv2D(filters=64, kernel_size=(3,3), strides=(1,1), padding='same')(x)
+        x = BatchNormalization(axis=-1, epsilon=1e-3)(x)
+        x = Activation('relu')(x)   
+    # last layer, Conv
+    x = Conv2D(filters=1, kernel_size=(3,3), strides=(1,1), padding='same')(x)
+    x = Subtract()([inpt, x])   # input - noise
+    model = Model(inputs=inpt, outputs=x)
     return model
 
 if __name__ == '__main__':
