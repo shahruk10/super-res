@@ -78,7 +78,16 @@ def ResNetSR001(params):
 
     return Model(inputs=[i], outputs=[x])
 
-
+@addModel
+def SRCNN(n1=64,n2=32,n3=1,f1=9,f2=1,f3=5,img_rows=32,img_cols=32,channels=3):
+    x = Input(shape = (img_rows,img_cols,channels))
+    c1 = Convolution2D(n1, f1,f1, activation = 'relu', init = 'he_normal', border_mode='same')(x)
+    c2 = Convolution2D(n2, f2, f2, activation = 'relu', init = 'he_normal', border_mode='same')(c1)
+    c3 = Convolution2D(n3, f3, f3, init = 'he_normal', border_mode='same')(c2)
+    model = Model(input = x, output = c3)
+    #adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-8) 
+    #model.compile(loss='mse', metrics=[PSNRLoss], optimizer=adam)     
+    return model
 
 if __name__ == '__main__':
 	model = makeModel(sys.argv[1], verbose=True)
