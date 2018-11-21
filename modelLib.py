@@ -1,7 +1,7 @@
 from keras.models import Model
 from keras.layers import Input, Dense, Flatten, BatchNormalization, Dropout, Activation
 from keras.layers import Conv2D, MaxPool2D, UpSampling2D, Conv2DTranspose
-from keras.layers import Concatenate, Add, Average
+from keras.layers import Concatenate, Add, Average,Convolution2D
 from keras import backend as K
 
 from keras.utils import plot_model
