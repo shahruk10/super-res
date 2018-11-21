@@ -1,5 +1,5 @@
 from keras.models import Model
-from keras.layers import Input, Dense, Flatten, BatchNormalization, Dropout, Activation, Subtract
+from keras.layers import Input, Dense, Flatten, BatchNormalization, Dropout, Activation, Subtract, add
 from keras.layers import Conv2D, MaxPool2D, UpSampling2D, Conv2DTranspose
 from keras.layers import Concatenate, Add, Average,Convolution2D
 from keras import backend as K
@@ -104,6 +104,60 @@ def DnCNN_001():
     x = Conv2D(filters=1, kernel_size=(3,3), strides=(1,1), padding='same')(x)
     x = Subtract()([inpt, x])   # input - noise
     model = Model(inputs=inpt, outputs=x)
+    return model
+
+@addModel
+def VDSR_001(IMG_SIZE = (32,32,1)):
+    input_img = Input(shape=IMG_SIZE)
+
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(input_img)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    model = Activation('relu')(model)
+    model = Conv2D(1, (3, 3), padding='same', kernel_initializer='he_normal')(model)
+    res_img = model
+
+    output_img = add([res_img, input_img])
+
+    model = Model(input_img, output_img)
+
     return model
 
 if __name__ == '__main__':
