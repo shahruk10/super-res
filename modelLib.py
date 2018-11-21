@@ -3,7 +3,7 @@ from keras.layers import Input, Dense, Flatten, BatchNormalization, Dropout, Act
 from keras.layers import Conv2D, MaxPool2D, UpSampling2D, Conv2DTranspose
 from keras.layers import Concatenate, Add, Average,Convolution2D
 from keras import backend as K
-
+from keras.layers.advanced_activations import LeakyReLU,PReLU
 from keras.utils import plot_model
 from keras.models import load_model
 
