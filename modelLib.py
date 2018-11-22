@@ -6,6 +6,9 @@ from keras import backend as K
 from keras.layers.advanced_activations import LeakyReLU,PReLU
 from keras.utils import plot_model
 from keras.models import load_model
+from customInit import bilinear_upsample_weights
+from keras.initializers import Constant
+
 
 import sys
 
@@ -187,6 +190,31 @@ def FSRCNN_001(scale_factor=4):
     output_img = model
 
     model = Model(input_img, output_img)
+    return model
+
+@addModel
+def LapSRN_001(d=10,s=3):
+    '''
+    d = no of Conv Layers in each stage
+    s = no of stages
+    * custom initializer used : bilinear_upsample_weights
+    '''
+    def stage(x,xint,d):
+        for i in range(d):
+                x = Conv2D(64,(3,3), padding = 'same', kernel_initializer='he_normal')(x)
+                x = LeakyReLU(alpha=0.2)(x)
+        x = Conv2DTranspose(1,(4,4),strides = (2,2), padding = 'same', kernel_initializer = Constant(bilinear_upsample_weights(2,1)))(x)
+        res = Conv2D(1,(3,3), padding = 'same', kernel_initializer='he_normal')(x)
+        up = Conv2DTranspose(1,(4,4),strides = (2,2), padding = 'same', kernel_initializer = Constant(bilinear_upsample_weights(2,1)))(xint)
+        out = add([up,res])
+        return x, out
+
+    xin = Input(shape =(32,32,1))
+    x = xin
+    out = xin
+    for i in range(s):
+        x, out = stage(x, out, d)
+    model = Model(inputs = xin, outputs = out)
     return model
 
 if __name__ == '__main__':
