@@ -12,7 +12,7 @@ def PSNRLoss(y_true, y_pred):
     However, since we are scaling our input, MAXp = 1. Therefore 20 * log10(1) = 0.
     Thus we remove that component completely and only compute the remaining MSE component.
     """
-    return -10. * K.log(K.mean(K.square(y_pred - y_true))) / K.log(10.)
+    return 10. * K.log(K.mean(K.square(y_pred - y_true))) / K.log(10.)
 
 def psnr(y_true, y_pred):
     assert y_true.shape == y_pred.shape, "Cannot calculate PSNR. Input shapes not same." \
