@@ -74,7 +74,7 @@ def ResNetSR001(params):
 
     x = Add()([x, x0])
     x = upscale_block(x, label='1', useConv2DTranspose=False)
-    x = Conv2D(3, (3, 3), activation="linear", padding='same', name='sr_res_conv_final')(x)
+    x = Conv2D(3, (3, 3), activation="sigmoid", padding='same', name='sr_res_conv_final')(x)
 
     return Model(inputs=[i], outputs=[x])
 
