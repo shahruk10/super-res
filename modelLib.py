@@ -82,18 +82,19 @@ def ResNetSR001(params):
     return Model(inputs=[i], outputs=[x])
 
 @addModel
-def SRCNN_001(n1=64,n2=32,n3=1,f1=9,f2=1,f3=5,img_rows=32,img_cols=32,channels=3):
-    x = Input(shape = (img_rows,img_cols,channels))
-    c1 = Convolution2D(n1, f1,f1, activation = 'relu', init = 'he_normal', border_mode='same')(x)
-    c2 = Convolution2D(n2, f2, f2, activation = 'relu', init = 'he_normal', border_mode='same')(c1)
-    c3 = Convolution2D(n3, f3, f3, init = 'he_normal', border_mode='same')(c2)
+def SRCNN_001(params):
+    #n1=64,n2=32,n3=1,f1=9,f2=1,f3=5,img_rows=32,img_cols=32,channels=3    
+    x = Input(shape = (32,32,3))
+    c1 = Convolution2D(64, 9,9, activation = 'relu', init = 'he_normal', border_mode='same')(x)
+    c2 = Convolution2D(32, 1,1, activation = 'relu', init = 'he_normal', border_mode='same')(c1)
+    c3 = Convolution2D(3, 5,5, init = 'he_normal', border_mode='same')(c2)
     model = Model(input = x, output = c3)
     #adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-8) 
     #model.compile(loss='mse', metrics=[PSNRLoss], optimizer=adam)     
     return model
 
 @addModel
-def DnCNN_001():
+def DnCNN_001(params):
     inpt = Input(shape=(32,32,3))
     # 1st layer, Conv+relu
     x = Conv2D(filters=64, kernel_size=(3,3), strides=(1,1), padding='same')(inpt)
@@ -110,8 +111,8 @@ def DnCNN_001():
     return model
 
 @addModel
-def VDSR_001(IMG_SIZE = (32,32,1)):
-    input_img = Input(shape=IMG_SIZE)
+def VDSR_001(params):
+    input_img = Input(shape=(32,32,3))
 
     model = Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal')(input_img)
     model = Activation('relu')(model)
@@ -164,9 +165,9 @@ def VDSR_001(IMG_SIZE = (32,32,1)):
     return model
 
 @addModel
-def FSRCNN_001(scale_factor=4):
+def FSRCNN_001(params):
     input_img = Input(shape=(32,32, 1))
-
+    scale_factor=4
     model = Conv2D(56, (5, 5), padding='same', kernel_initializer='he_normal')(input_img)
     model = PReLU()(model)
 
