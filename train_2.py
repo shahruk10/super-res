@@ -9,6 +9,9 @@ weightsFolder = modelFolder + '/' + modelName
 bestModelPath = weightsFolder + '/' + 'best.hdf5'
 ensureDir(bestModelPath)
 
+img_folder = 'H:/Projects/SR/images/val/*.jpg'
+imgPaths = glob.glob(img_folder)
+
 #optimizer_params = ''
 metricFuncs = ['psnr']
 
